@@ -124,8 +124,6 @@ function rect(){
   .style("stroke", "none")
 });
 }
-  // makeArc(this.id);
-
 
 //each piece of data has an ID
 //each ID has a source and a target
@@ -186,12 +184,8 @@ var circle = svg.selectAll("circle")
     return "black"; //"pink"
   }
   })
-  // .attr("stroke","pink")
   .attr("stroke-width", 3); 
-// }
-// if (a==1){
-//   circle.remove();
-// }
+//may not be necessary
 var hRect = svg.selectAll("hRect")
   .data(function(d){
     return data.links;
@@ -214,15 +208,6 @@ var hRect = svg.selectAll("hRect")
   .attr("width", 10)
   .attr("height",10)
   .attr("fill", "none")
-  // function(d){ 
-  //   // if (d.source==id && d.)
-  //   if (d.target==id && id!=null && a==0){
-  //     return "black";
-  //   } else {
-  //     return "grey";
-  //   }
-  // })
-  // .attr("stroke-width",3)
   .attr("stroke", function(d){ 
     if (d.target==id && id!=null && a==0){
       return "black";
@@ -269,67 +254,34 @@ if (a==1){
 }
 }
 
-function goBack(i){
-// svg.selectAll("circ")
-console.log(data.nodes)
-var other = data.nodes;
-// circ
-//   .data(data.nodes)
-//   .enter()
-  // .append("ul")
-  // function(d){
-  if (other.tags!=null){
-    return tagWeight(other.tags.length);
-  }
-  else {
-    return .5;
-  }
-}
-
-  // .attr("class", "circ")
-  // .transition()
-//   .attr("stroke-width", function(d){ 
-//     if (d.tags!=null){
-//       console.log("hey")
-//       console.log(tagWeight(d.tags.length))
-//       var thisis = tagWeight(d.tags.length)
-//       return thisis;
-//     }
-//     else {
-//       return .5;
-//     }
+//personal check references
+// var line = svg.selectAll("line")
+//   .data(function(d){ 
+//     return data.links;
+//     // console.log(d3.ascending(d.group, d.group));
 //   })
-// }
-
-
-//    .attr("cx", function(d,i){
-//     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
-//     if (thingmid>0){
-//     return alongWidth(d.target)+(thingmid/2);
-//     }
-//     else {
-//       var posmid = thingmid*(-1);
-//       // console.log(posmid);
-//       // return posmid+(posmid/2);
-//       // return alongWidth(d.target)+(posmid/2);
-//       return alongWidth(d.target)-(posmid/2);
-//     }
-//   })
-//   .attr("cy", height/2)
-//   .attr("r", function(d,i){
-//     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
-//     if (thingmid>0){
-//     return thingmid/2;
-//   }
-//   else{
-//       var posmid = thingmid*(-1);
-//       // console.log(posmid);
-//       return posmid/2;
-//     }
-//   })
-//   .attr("fill", "none")
+//  .enter().append("line")
+//  .attr("opacity", .2)
+//   .attr("x1", function(d,i){   // if (d.source==2 && d.target==0){
+//   // if (d.target==0){
+//     // console.log(d.source);
+//     return alongWidth(d.source);
+//   // }
+//   // else {
+//   //   return "-10";
+//   // }
+//  })
+//  .attr("y1", function(d,i){ return ((height/2)-i) })
+//  .attr("x2", function(d,i){
+//   // if (d.target==0){
+//     return alongWidth(d.target);
+//   // }
+//   // else {
+//   //   return "-10";
+//   // }
+//  })
+//  .attr("y2", height/2)
 //   .attr("stroke",function(d,i){
-// // console.log(strokey)
 //     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
 //     if (thingmid>0){
 //       return "red";
@@ -337,233 +289,7 @@ var other = data.nodes;
 //     else {
 //       return "blue";
 //     }
-//   });
-
-
-// svg.selectAll("circ")
-//   .data(data.nodes)
-//   .enter().append("circle")
-//   .attr("class", "circ")
-//   // .transition()
-//   .attr("stroke-width", function(d){ 
-//     if (d.tags!=null){
-//       console.log("hey")
-//       console.log(tagWeight(d.tags.length))
-//       return tagWeight(d.tags.length);
-//     }
-//     else {
-//       return .5;
-//     }
-//   });
-
-
-
-
-
-
-//access different set of data to give proper stroke weights
-// circle
-//   .data(function(d){ 
-//     return data.nodes;
-//     // console.log(d3.ascending(d.group, d.group));
 //   })
-//  .enter().append("circle")
-//  .transition()
-//  .attr("opacity", function(d,i){
-//   if (d.tags!=null){
-//     console.log("hey")
-//     return tagWeight(d.tags.length);
-//   }
-//   else {
-//     return .1;
-//   }
-//  });
-
-
-
-
-
-var line = svg.selectAll("line")
-  .data(function(d){ 
-    return data.links;
-    // console.log(d3.ascending(d.group, d.group));
-  })
- .enter().append("line")
- .attr("opacity", .2)
-  .attr("x1", function(d,i){   // if (d.source==2 && d.target==0){
-  // if (d.target==0){
-    // console.log(d.source);
-    return alongWidth(d.source);
-  // }
-  // else {
-  //   return "-10";
-  // }
- })
- .attr("y1", function(d,i){ return ((height/2)-i) })
- .attr("x2", function(d,i){
-  // if (d.target==0){
-    return alongWidth(d.target);
-  // }
-  // else {
-  //   return "-10";
-  // }
- })
- .attr("y2", height/2)
-  .attr("stroke",function(d,i){
-    var thingmid = (alongWidth(d.source)-alongWidth(d.target));
-    if (thingmid>0){
-      return "red";
-    } 
-    else {
-      return "blue";
-    }
-  })
- .attr("stroke-width", 3)
- .attr("fill", "pink");
-
-
-
-
-
-
-
-
-
-
-
-//just does a horizontal force layout
-// var force = d3.layout.force()
-//     .charge(-60)
-//     .linkDistance(60)
-//     .size([width, height]);
-
-// force
-//     .gravity(0)
-//     .nodes(data.nodes)
-//     .links(data.links)
-//     .start();
-
-// var line = svg.selectAll("line")
-//       .data(data.links)
-//       .enter().append("svg:line")
-//       .attr("opacity", ".3")
-//       .attr("stroke", "grey")
-//       .attr("stroke-width",3)
-//       .attr("fill","grey")
-//       .attr("x1", function(d, i) { return alongWidth(i); }) //d.source.x
-//       .attr("y1", function(d) { return height/2; }) //d.source.y
-//       .attr("x2", function(d) { return (d.target.x); }) //d.target.x
-//       .attr("y2", function(d) { return height/2; }); //d.target.y
-
-// var node = svg.selectAll(".node")
-//     .data(data.links)
-//     .enter().append("circle")
-//     .attr("class", "node")
-//     .attr("r", 10)
-//     .attr("opacity", ".3")
-//     .attr("fill", "blue")
-//     //   function(d) {
-//     //   if(d.group == 1) {
-//     //     return "blue";
-//     //   } 
-//     //   if(d.group == 2) {
-//     //     return "green";
-//     //   }
-//     //   else {
-//     //     return "pink"; 
-//     //   }
-//     // })
-//     .call(force.drag)
-
-//   force.on("tick", function(e) {
-//     line.attr("x1", function(d, i) { return alongWidth(i); }) //d.source.x;
-//         .attr("y1", function(d) { return height/2 }) //d.source.y;
-//         .attr("x2", function(d) { return (d.target.x); }) //d.target.x;
-//         .attr("y2", function(d) { return height/2 }); //d.target.y;
-
-//       node.attr("cx", function(d,i) { return alongWidth(i); }) // alongWidth(i)
-//         .attr("cy", function(d) { return height/2; }); //not d.y
-//   });
-
-//here are a series of attempts at drawing arcs etc. properly
-// var lineFunction = d3.svg.line()
-//   .x(function(d){ return alongWidth(d.source) })
-//   .y (function(d){ return height/2 })
-//   .interpolate("basis");
-
-// var lineGraph = svg.append("path")
-//   .attr("d", lineFunction(data.links))
-//   .attr("stroke","blue")
-//   .attr("stroke-width", 2)
-//   .attr("fill","none");
-
-//an attempt at drawing paths based on data - doesn't work
-// var linet = d3.svg.line()
-//     .interpolate("bundle")
-//     .tension(.85)
-//     .x(function(d,i) { return alongWidth(i) })
-//     .y(function(d){ return height/2 });
-
-//   svg.selectAll("path")
-//       .data(data.links)
-//     .enter().append("path")
-//       .attr("class", "link")
-//       .attr("d", linet);
-
-//set up that works for force directed diagram
-// force.on("tick", function() {
-//   link.attr("x1", function(d) { return d.source.x; })
-//     .attr("y1", function(d) { return d.source.y; })
-//     .attr("x2", function(d) { return d.target.x; })
-//     .attr("y2", function(d) { return d.target.y; });
-
-//what an arc should look like
-// var arc = d3.svg.arc()
-//     .innerRadius(100)
-//     .outerRadius(99)
-//     .startAngle(-1.9) //converting from degs to radians
-//     .endAngle(1.9) //just radians
-
-//but when you construct it this way it is problematic to attribute data 
-// var arcis = svg.selectAll("arc")
-//   .data(function(d){
-//     return data.links;
-//   })
-//   .enter().append("path")
-//   .attr("d", arc)
-//   .attr("transform", function(d,i){
-//     return "translate("+200+","+200+")"
-// })
-
-
-
-
-
-
-
-
-//attempts at drawing lines and paths etc.
-// var lineFunction = d3.svg.line()
-//     .x(function(d, i){ return alongWidth(i); })
-//      .y(function(d){ return height/4; })
-//      .interpolate("linear");
-
-// var lineGraph = svg.append("path")
-//     .attr("d", lineFunction(data.links))
-//     .attr("stroke", "grey")
-//     .attr("stroke-width", 1)
-//     .attr("fill", "none");
-// var link = d3.svg.diagonal()
-//      .projection(function(d)
-//      {
-//          return [d.y, d.x];
-//      });
-
-// svg.selectAll(".link")
-//      .data(links)
-//      .enter()
-//      .append("svg:path")
-//      .attr("class", "link")
-//      .attr("d", link);
-
+//  .attr("stroke-width", 3)
+//  .attr("fill", "pink");
 });
