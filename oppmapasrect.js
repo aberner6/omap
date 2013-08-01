@@ -33,9 +33,15 @@ var toggleScale = d3.scale.linear()
   .domain([0, maxScore]) //maxScore
   .range([0, height/1.5]);
 
-var alongWidth = d3.scale.linear()
+var widthHere = d3.scale.linear()
   .domain([0, maxResponse]) //gotta be total people
-  .range([10, width-10]);
+  .range([10, width/3-10]);
+var widthNear = d3.scale.linear()
+  .domain([0, maxResponse]) //gotta be total people
+  .range([width/3, ((width*2/3)-10)]);
+var widthFar = d3.scale.linear()
+  .domain([0, maxResponse]) //gotta be total people
+  .range([width*2/3, width-10]);
 
 var alongHeight = d3.scale.linear()
   .domain([0, maxResponse]) //gotta be total people
@@ -54,14 +60,6 @@ function toTagStroke(id) {
     console.log(d.nodes.tags);
   }
   })
-  // var thingie = d3.selectAll("circle")
-    // .data(function(d){ return data.nodes })
-    // .enter().append("circle")
-    // .attr("stroke-width", function(d,i){
-    //   if (id==d.id){
-    //     console.log("hey");
-    //   }
-    // })
 }
 
 var svg = d3.select("#omap").append("svg")
@@ -79,7 +77,6 @@ function rect(){
   var rect = svg.selectAll("rect")
   .data(function(d){ 
     return data.nodes;
-    // console.log(d3.ascending(d.group, d.group));
   })
  .enter().append("rect")
  .attr("opacity", ".2")
@@ -92,21 +89,20 @@ function rect(){
  //  }
  // })
  .attr("x", function(d,i){
-    return alongWidth(i);
-    })
+    if (d.group==1){
+    return widthHere(i);
+    }
+    if (d.group==2){
+      return widthNear(i);
+    }
+    if (d.group==3){
+      return widthFar(i);
+    }
+  })
  .attr("y", height/2)
  .attr("width", 10)
  .attr("height", 10)
- //function(d,i){
- //  if (d.tags!=null){
- //    console.log(d.tags)
- //    return tagWeight(d.tags.length);
- //  }
- //  else {
- //    return 10;
- //  }
- // })
-.attr("fill", "blue")
+ .attr("fill", "blue")
 
 .on('mouseover', function(d,i){
   a=0;
@@ -119,7 +115,8 @@ function rect(){
 .on('mouseout', function(d,i){
   a=1;
   var thisid = d.id;
-  makeArc(thisid)
+  var thisgroup = d.group;
+  makeArc(thisid, thisgroup)
   d3.select(this)
   .style("stroke", "none")
 });
@@ -132,8 +129,10 @@ function rect(){
 //here is the most basic version of connections between connections! 
 //if you ignore the fact that it's lines not arcs, it works properly in that it links the data correctly
 var circle = svg.selectAll("circle")
-function makeArc(id){
+function makeArc(id, group){
+  console.log(group);
   console.log(id);
+
 var circle = svg.selectAll("circle")
   .data(function(d){
     return data.links;
@@ -149,13 +148,35 @@ var circle = svg.selectAll("circle")
   }
   })
   .attr("cx", function(d,i){
-    var thingmid = (alongWidth(d.source)-alongWidth(d.target));
-    if (thingmid>0){
-    return alongWidth(d.target)+(thingmid/2);
-    }
+    if (group==1){
+      var thingmid = (widthHere(d.source)-widthHere(d.target)); //but what if the target is in a different group - then we can't use the widthHere scale
+      if (thingmid>0){
+      return widthHere(d.target)+(thingmid/2);
+      }
     else {
       var posmid = thingmid*(-1);
-      return alongWidth(d.target)-(posmid/2);
+      return widthHere(d.target)-(posmid/2);
+    }
+  }
+    if (group==2){
+    var thingmid = (widthNear(d.source)-widthNear(d.target));
+    if (thingmid>0){
+      return widthNear(d.target)+(thingmid/2);
+    }
+    else {
+    var posmid = thingmid*(-1);
+      return widthNear(d.target)-(posmid/2);
+    }
+    }
+    if (group==3){
+    var thingmid = (widthFar(d.source)-widthFar(d.target));
+    if (thingmid>0){
+      return widthFar(d.target)+(thingmid/2);
+    }
+    else {
+    var posmid = thingmid*(-1);
+      return widthFar(d.target)-(posmid/2);
+    }
     }
   })
   .attr("cy", height/2)
@@ -163,20 +184,51 @@ var circle = svg.selectAll("circle")
   .transition()
   .duration(1000)
   .attr("r", function(d,i){
-    var thingmid = (alongWidth(d.source)-alongWidth(d.target));
-    if (thingmid>0){
-    return thingmid/2;
-  }
-  else{
+    if (group==1){
+      var thingmid = (widthHere(d.source)-widthHere(d.target));
+      if (thingmid>0){
+      return (thingmid/2);
+      }
+    else {
       var posmid = thingmid*(-1);
-      // console.log(posmid);
-      return posmid/2;
+      return (posmid/2);
+    }
+  }
+    if (group==2){
+    var thingmid = (widthNear(d.source)-widthNear(d.target));
+    if (thingmid>0){
+      return (thingmid/2);
+    }
+    else {
+    var posmid = thingmid*(-1);
+      return (posmid/2);
+    }
+    }
+    if (group==3){
+    var thingmid = (widthFar(d.source)-widthFar(d.target));
+    if (thingmid>0){
+      return (thingmid/2);
+    }
+    else {
+    var posmid = thingmid*(-1);
+      return (posmid/2);
+    }
     }
   })
+
+  //   var thingmid = (widthFar(d.source)-widthFar(d.target));
+  //   if (thingmid>0){
+  //   return thingmid/2;
+  // }
+  // else{
+  //     var posmid = thingmid*(-1);
+  //     // console.log(posmid);
+  //     return posmid/2;
+
   // .attr("ry",10)
   .attr("fill", "none")
   .attr("stroke",function(d,i){
-    console.log(d.source)
+    // console.log(d.source)
     // var thingmid = (alongWidth(d.source)-alongWidth(d.target));
     if (d.source==id && id!=null){
     return "grey";
@@ -186,36 +238,37 @@ var circle = svg.selectAll("circle")
   })
   .attr("stroke-width", 3); 
 //may not be necessary
-var hRect = svg.selectAll("hRect")
-  .data(function(d){
-    return data.links;
-  })
-  hRect.enter().append("rect")
-  .attr("class","hRect")
-  .attr("opacity", ".3")
-  // .attr("x", function(d,i){ return i*20})
-  .attr("x", function(d,i){
-    var thingmid = (alongWidth(d.source)-alongWidth(d.target));
-    if (thingmid>0){
-    return alongWidth(d.target);
-    }
-    else {
-      var posmid = thingmid*(-1);
-      return alongWidth(d.target);
-    }
-  })
-  .attr("y", height/2)
-  .attr("width", 10)
-  .attr("height",10)
-  .attr("fill", "none")
-  .attr("stroke", function(d){ 
-    if (d.target==id && id!=null && a==0){
-      return "black";
-    } else {
-      return "white";
-      // return "none";
-    }
-  });
+// var hRect = svg.selectAll("hRect")
+//   .data(function(d){
+//     return data.links;
+//   })
+//   hRect.enter().append("rect")
+//   .attr("class","hRect")
+//   .attr("opacity", ".3")
+//   // .attr("x", function(d,i){ return i*20})
+//   .attr("x", function(d,i){
+//     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
+//     if (thingmid>0){
+//     return alongWidth(d.target);
+//     }
+//     else {
+//       var posmid = thingmid*(-1);
+//       return alongWidth(d.target);
+//     }
+//   })
+//   .attr("y", height/2)
+//   .attr("width", 10)
+//   .attr("height",10)
+//   .attr("fill", "none")
+//   .attr("stroke", function(d){ 
+//     if (d.target==id && id!=null && a==0){
+//       return "black";
+//     } else {
+//       return "white";
+//       // return "none";
+//     }
+//   });
+
 // if (a==0 && id!=null){
 // var hCirc = svg.selectAll("hCirc")
 //   .data(function(d){
