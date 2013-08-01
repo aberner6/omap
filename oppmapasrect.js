@@ -95,23 +95,17 @@ function rect(){
     return alongWidth(i);
     })
  .attr("y", height/2)
- .attr("width", function(d,i){
-  if (d.tags!=null){
-    return tagWeight(d.tags.length);
-  }
-  else {
-    return 10;
-  }
- })
- .attr("height", function(d,i){
-  if (d.tags!=null){
-    console.log(d.tags)
-    return tagWeight(d.tags.length);
-  }
-  else {
-    return 10;
-  }
- })
+ .attr("width", 10)
+ .attr("height", 10)
+ //function(d,i){
+ //  if (d.tags!=null){
+ //    console.log(d.tags)
+ //    return tagWeight(d.tags.length);
+ //  }
+ //  else {
+ //    return 10;
+ //  }
+ // })
 .attr("fill", "blue")
 
 .on('mouseover', function(d,i){
@@ -149,7 +143,13 @@ var circle = svg.selectAll("circle")
 // if (id!=null){
   circle.enter().append("circle")
   .attr("class", "circ")
-  .attr("opacity", .2)
+  .attr("opacity", function(d,i){
+    if (d.source==id && id!=null){
+    return ".8";
+  } else {
+    return ".03";
+  }
+  })
   .attr("cx", function(d,i){
     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
     if (thingmid>0){
@@ -183,9 +183,10 @@ var circle = svg.selectAll("circle")
     if (d.source==id && id!=null){
     return "grey";
   } else {
-    return "none";
+    return "black"; //"pink"
   }
   })
+  // .attr("stroke","pink")
   .attr("stroke-width", 3); 
 // }
 // if (a==1){
@@ -382,43 +383,43 @@ var other = data.nodes;
 
 
 
-// var line = svg.selectAll("line")
-//   .data(function(d){ 
-//     return data.links;
-//     // console.log(d3.ascending(d.group, d.group));
-//   })
-//  .enter().append("line")
-//  .attr("opacity", .2)
-//   .attr("x1", function(d,i){   // if (d.source==2 && d.target==0){
-//   // if (d.target==0){
-//     // console.log(d.source);
-//     return alongWidth(d.source);
-//   // }
-//   // else {
-//   //   return "-10";
-//   // }
-//  })
-//  .attr("y1", function(d,i){ return ((height/2)-i) })
-//  .attr("x2", function(d,i){
-//   // if (d.target==0){
-//     return alongWidth(d.target);
-//   // }
-//   // else {
-//   //   return "-10";
-//   // }
-//  })
-//  .attr("y2", height/2)
-//   .attr("stroke",function(d,i){
-//     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
-//     if (thingmid>0){
-//       return "red";
-//     } 
-//     else {
-//       return "blue";
-//     }
-//   })
-//  .attr("stroke-width", 3)
-//  .attr("fill", "pink");
+var line = svg.selectAll("line")
+  .data(function(d){ 
+    return data.links;
+    // console.log(d3.ascending(d.group, d.group));
+  })
+ .enter().append("line")
+ .attr("opacity", .2)
+  .attr("x1", function(d,i){   // if (d.source==2 && d.target==0){
+  // if (d.target==0){
+    // console.log(d.source);
+    return alongWidth(d.source);
+  // }
+  // else {
+  //   return "-10";
+  // }
+ })
+ .attr("y1", function(d,i){ return ((height/2)-i) })
+ .attr("x2", function(d,i){
+  // if (d.target==0){
+    return alongWidth(d.target);
+  // }
+  // else {
+  //   return "-10";
+  // }
+ })
+ .attr("y2", height/2)
+  .attr("stroke",function(d,i){
+    var thingmid = (alongWidth(d.source)-alongWidth(d.target));
+    if (thingmid>0){
+      return "red";
+    } 
+    else {
+      return "blue";
+    }
+  })
+ .attr("stroke-width", 3)
+ .attr("fill", "pink");
 
 
 
