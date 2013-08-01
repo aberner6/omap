@@ -73,8 +73,10 @@ var svg = d3.select("#omap").append("svg")
   .attr("preserveAspectRatio", "xMinYMin")
   .attr("pointer-events", "all")
 
-
+rect()
 var rect = svg.selectAll("rect")
+function rect(){
+  var rect = svg.selectAll("rect")
   .data(function(d){ 
     return data.nodes;
     // console.log(d3.ascending(d.group, d.group));
@@ -98,7 +100,7 @@ var rect = svg.selectAll("rect")
     return tagWeight(d.tags.length);
   }
   else {
-    return 6;
+    return 10;
   }
  })
  .attr("height", function(d,i){
@@ -107,10 +109,29 @@ var rect = svg.selectAll("rect")
     return tagWeight(d.tags.length);
   }
   else {
-    return 6;
+    return 10;
   }
  })
-.attr("fill", "blue");
+.attr("fill", "blue")
+
+.on('mouseover', function(d,i){
+  a=0;
+  d3.select(this)
+  .style("stroke", "black")
+  .attr("stroke-width","6")
+  var thisid = d.id;
+  makeArc(thisid);
+  })
+.on('mouseout', function(d,i){
+  a=1;
+  var thisid = d.id;
+  makeArc(thisid)
+  d3.select(this)
+  .style("stroke", "none")
+});
+}
+  // makeArc(this.id);
+
 
 //each piece of data has an ID
 //each ID has a source and a target
@@ -118,13 +139,15 @@ var rect = svg.selectAll("rect")
 //target is to other's ID
 //here is the most basic version of connections between connections! 
 //if you ignore the fact that it's lines not arcs, it works properly in that it links the data correctly
-
-
+var circle = svg.selectAll("circle")
+function makeArc(id){
+  console.log(id);
 var circle = svg.selectAll("circle")
   .data(function(d){
     return data.links;
   })
-  .enter().append("circle")
+// if (id!=null){
+  circle.enter().append("circle")
   .attr("class", "circ")
   .attr("opacity", .2)
   .attr("cx", function(d,i){
@@ -134,13 +157,13 @@ var circle = svg.selectAll("circle")
     }
     else {
       var posmid = thingmid*(-1);
-      // console.log(posmid);
-      // return posmid+(posmid/2);
-      // return alongWidth(d.target)+(posmid/2);
       return alongWidth(d.target)-(posmid/2);
     }
   })
   .attr("cy", height/2)
+  .attr("r", 0)
+  .transition()
+  .duration(1000)
   .attr("r", function(d,i){
     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
     if (thingmid>0){
@@ -152,40 +175,98 @@ var circle = svg.selectAll("circle")
       return posmid/2;
     }
   })
+  // .attr("ry",10)
   .attr("fill", "none")
   .attr("stroke",function(d,i){
-// console.log(strokey)
+    console.log(d.source)
+    // var thingmid = (alongWidth(d.source)-alongWidth(d.target));
+    if (d.source==id && id!=null){
+    return "grey";
+  } else {
+    return "none";
+  }
+  })
+  .attr("stroke-width", 3); 
+// }
+// if (a==1){
+//   circle.remove();
+// }
+var hRect = svg.selectAll("hRect")
+  .data(function(d){
+    return data.links;
+  })
+  hRect.enter().append("rect")
+  .attr("class","hRect")
+  .attr("opacity", ".3")
+  // .attr("x", function(d,i){ return i*20})
+  .attr("x", function(d,i){
     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
     if (thingmid>0){
-      return "red";
-    } 
+    return alongWidth(d.target);
+    }
     else {
-      return "blue";
+      var posmid = thingmid*(-1);
+      return alongWidth(d.target);
     }
   })
-  
-  .attr("stroke-width", function(d,i){
-    var thisis = goBack(i);
-    return thisis;
+  .attr("y", height/2)
+  .attr("width", 10)
+  .attr("height",10)
+  .attr("fill", "none")
+  // function(d){ 
+  //   // if (d.source==id && d.)
+  //   if (d.target==id && id!=null && a==0){
+  //     return "black";
+  //   } else {
+  //     return "grey";
+  //   }
+  // })
+  // .attr("stroke-width",3)
+  .attr("stroke", function(d){ 
+    if (d.target==id && id!=null && a==0){
+      return "black";
+    } else {
+      return "white";
+      // return "none";
+    }
   });
-// circle.exit();
-
-// svg.enter().append("circle")
-//   .data(data.nodes)
-//   .attr("stroke-width", function(d,i){
-//     // var thisis = goBack()
-//     // console.log(thisis)
-//     // return thisis;
-//       if (data.nodes.tags!=null){
-//     return tagWeight(data.nodes.tags.length);
-//   }
-//   else {
-//     return .5;
-//   }
-
+// if (a==0 && id!=null){
+// var hCirc = svg.selectAll("hCirc")
+//   .data(function(d){
+//     return data.links;
+//   })
+//   hCirc.enter().append("circle")
+//   .attr("class","hCirc")
+//   .attr("opacity", ".1")
+//   // .attr("x", function(d,i){ return i*20})
+//   .attr("cx", function(d,i){
+//     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
+//     if (thingmid>0){
+//     return alongWidth(d.target);
+//     }
+//     else {
+//       var posmid = thingmid*(-1);
+//       return alongWidth(d.target);
+//     }
+//   })
+//   .attr("cy", height/2)
+//   .attr("r", 6)
+//   // .attr("fill", "blue")
+//   .attr("stroke-width",3)
+//   .attr("stroke", function(d){ 
+//     if (d.source==id && id!=null){
+//       return "black";
+//     } else {
+//       return "white";
+//       // return "none";
+//     }
 //   });
-// circle.exit();
-
+// }
+if (a==1){
+  circle.remove();
+  // rect.remove();
+}
+}
 
 function goBack(i){
 // svg.selectAll("circ")
@@ -301,43 +382,43 @@ var other = data.nodes;
 
 
 
-var line = svg.selectAll("line")
-  .data(function(d){ 
-    return data.links;
-    // console.log(d3.ascending(d.group, d.group));
-  })
- .enter().append("line")
- .attr("opacity", .2)
-  .attr("x1", function(d,i){   // if (d.source==2 && d.target==0){
-  // if (d.target==0){
-    // console.log(d.source);
-    return alongWidth(d.source);
-  // }
-  // else {
-  //   return "-10";
-  // }
- })
- .attr("y1", function(d,i){ return ((height/2)-i) })
- .attr("x2", function(d,i){
-  // if (d.target==0){
-    return alongWidth(d.target);
-  // }
-  // else {
-  //   return "-10";
-  // }
- })
- .attr("y2", height/2)
-  .attr("stroke",function(d,i){
-    var thingmid = (alongWidth(d.source)-alongWidth(d.target));
-    if (thingmid>0){
-      return "red";
-    } 
-    else {
-      return "blue";
-    }
-  })
- .attr("stroke-width", 3)
- .attr("fill", "pink");
+// var line = svg.selectAll("line")
+//   .data(function(d){ 
+//     return data.links;
+//     // console.log(d3.ascending(d.group, d.group));
+//   })
+//  .enter().append("line")
+//  .attr("opacity", .2)
+//   .attr("x1", function(d,i){   // if (d.source==2 && d.target==0){
+//   // if (d.target==0){
+//     // console.log(d.source);
+//     return alongWidth(d.source);
+//   // }
+//   // else {
+//   //   return "-10";
+//   // }
+//  })
+//  .attr("y1", function(d,i){ return ((height/2)-i) })
+//  .attr("x2", function(d,i){
+//   // if (d.target==0){
+//     return alongWidth(d.target);
+//   // }
+//   // else {
+//   //   return "-10";
+//   // }
+//  })
+//  .attr("y2", height/2)
+//   .attr("stroke",function(d,i){
+//     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
+//     if (thingmid>0){
+//       return "red";
+//     } 
+//     else {
+//       return "blue";
+//     }
+//   })
+//  .attr("stroke-width", 3)
+//  .attr("fill", "pink");
 
 
 
