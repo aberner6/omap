@@ -32,6 +32,10 @@ var thick = 4; //thickness for highlighting, mouseovers
 var lmargin = 15; //left margin
 textmargin = 5; //text justifications
 
+var yellow = "#FFDF16"; //adaptive environment
+var green = "#6DC8C0"; //rejuvenation space
+var orange = "#F15A22"; //programmed serendipity
+
 var maxResponse = d3.max(data.nodes, function(d,i) { return i;} );
 console.log(maxResponse);
 
@@ -92,6 +96,17 @@ var svg = d3.select("#omap").append("svg")
   .attr("preserveAspectRatio", "xMinYMin")
   .attr("pointer-events", "all")
 
+var othersvg = d3.select("#blockit").append("svg")
+  .attr({
+    "width":"100%",
+    "height":"100%"
+  })
+  .attr("viewBox", "0 0 " + width + " " + height )
+  .attr("preserveAspectRatio", "xMinYMin")
+  .attr("pointer-events", "all")
+
+
+
 var sectionview = d3.select("#clicked").append("svg")
 // .attr("width", width)
 // .attr("height", height)
@@ -112,9 +127,9 @@ var sectionview = d3.select("#clicked").append("svg")
 
 function doNodes(){
   b = 1; //for toggle
-var blue = "#8ED8F8";
-var green = "#b9d989";
-var pink = "#F6ADCD"; 
+// var blue = "#8ED8F8";
+// var green = "#b9d989";
+// var pink = "#F6ADCD"; 
 
 var prevClicked = null;
 // var width = $('#graphHolder').width();
@@ -188,15 +203,16 @@ var node = sectionview.selectAll(".node")
     node.enter().append("circle")
     .attr("class", "node")
     .attr("r", 10)
+    .attr("opacity", ".5")
     .style("fill", function(d) {
       if(d.group == 1) {
-        return blue;
+        return green;
       } 
       if(d.group == 2) {
-        return green;
+        return orange;
       }
       else {
-        return pink; 
+        return yellow; 
       }
     })
     .call(force.drag)
@@ -319,8 +335,10 @@ function goBack(){
 }
 
 rect()
+
 var rect = svg.selectAll("rect")
 function rect(){
+
   var thistag;
   // var a;
   var rect = svg.selectAll("rect")
@@ -328,7 +346,7 @@ function rect(){
     return data.nodes;
   })
  .enter().append("rect")
- .attr("opacity", ".2")
+ .attr("opacity", ".5")
  .attr("x", function(d,i){
     return alongWidth(i);
     })
@@ -344,27 +362,65 @@ function rect(){
  //    return 10;
  //  }
  // })
-.attr("stroke","blue")
-.attr("fill", function(d){
-  return "blue";
-})
+.attr("stroke",function(d) {
+      if(d.group == 1) {
+        return green;
+      } 
+      if(d.group == 2) {
+        return orange;
+      }
+      else {
+        return yellow; 
+      }
+    })
+
+
+
+
+
+.attr("fill", function(d) {
+      if(d.group == 1) {
+        return green;
+      } 
+      if(d.group == 2) {
+        return orange;
+      }
+      else {
+        return yellow; 
+      }
+    })
 .on('mouseover', function(d,i){
+    $("#blockit").show("slow",function(){
+      })
+
   a=0;
   var thisid = d.id;
   thistag = d.tags;
   console.log(thistag);
   d3.select(this)
-  .attr("stroke", "black")
+  // .attr("stroke", "black")
   .attr("stroke-width", "8")
   makeArc(thisid)
  // tagCircle(thistag) //not working right
   })
 .on('mouseout', function(d,i){
+   $("#blockit").hide("slow",function(){
+      })
   a=1;
   var thisid = d.id;
   makeArc(thisid)
   d3.select(this)
-  .attr("stroke", "blue")
+  .attr("stroke", function(d) {
+      if(d.group == 1) {
+        return green;
+      } 
+      if(d.group == 2) {
+        return orange;
+      }
+      else {
+        return yellow; 
+      }
+    })
 });
 
       $('rect').tipsy({ 
@@ -435,22 +491,22 @@ rect
 
 function makeArc(id){
  // console.log(id);
-var circle = svg.selectAll("circle")
+var circle = svg.selectAll("ellipse")
   .data(function(d){
     // console.log(data.links)
     return data.links;
   })
 // if (id!=null){
-circle.enter().append("circle")
+circle.enter().append("ellipse")
   .attr("class", "circ")
   .attr("opacity", function(d,i){
-    if (d.source==id && id!=null){
+    if ((d.source==id || d.target==id)  && id!=null){
       console.log("source")
       console.log(d.source)
       console.log("source")
     return ".8";
   } else {
-    return ".03";
+    return "0";
   }
   })
   .attr("cx", function(d,i){
@@ -466,11 +522,33 @@ circle.enter().append("circle")
     }
   })
   .attr("cy", height/2)
-  .attr("r", 0)
+  .attr("rx", function(d,i){
+    var thingmid = (alongWidth(d.source)-alongWidth(d.target));
+    if (thingmid>0){
+    return thingmid/2;
+  }
+  else{
+      var posmid = thingmid*(-1);
+      // console.log(posmid);
+      return posmid/2;
+    }
+  })
+  .attr("ry",0)
   .transition()
-  .duration(3000)
+  .duration(1000)
         // .ease("elastic")
-  .attr("r", function(d,i){
+  .attr("rx", function(d,i){
+    var thingmid = (alongWidth(d.source)-alongWidth(d.target));
+    if (thingmid>0){
+    return thingmid/2;
+  }
+  else{
+      var posmid = thingmid*(-1);
+      // console.log(posmid);
+      return posmid/2;
+    }
+  })
+  .attr("ry", function(d,i){
     var thingmid = (alongWidth(d.source)-alongWidth(d.target));
     if (thingmid>0){
     return thingmid/2;
@@ -486,13 +564,22 @@ circle.enter().append("circle")
     // console.log(d.target)
     // console.log("target")
 
-    if (d.source==id && id!=null){
+    if ((d.source==id || d.target==id) && id!=null){
     return "grey";
   } else {
     return "black"; //"pink"
   }
   })
   .attr("stroke-width", 3);
+
+var oneRect = othersvg.selectAll("rect")
+  .attr("x", 0)
+  .attr("y", height/2)
+  .attr("width",1200)
+  .attr("height", 20)
+  .attr("fill", "white")
+  .attr("stroke","none");
+
 if (a==1){
   circle.remove();
   // rect.remove();
