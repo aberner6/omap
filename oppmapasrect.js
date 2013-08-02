@@ -107,9 +107,13 @@ var othersvg = d3.select("#blockit").append("svg")
 
 
 
+
+//to change 
+
+// var node = sectionview.selectAll(".node");
+
+function doNodes(){
 var sectionview = d3.select("#clicked").append("svg")
-// .attr("width", width)
-// .attr("height", height)
 .attr({
         "width": "100%",
         "height": "100%"
@@ -118,18 +122,11 @@ var sectionview = d3.select("#clicked").append("svg")
     .attr("preserveAspectRatio", "xMinYMin")
      .attr("pointer-events", "all")
      ///////////will this work
-    //  .append("g")
-    // .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
-    // .append("g")
-//to change 
+     .append("g")
+    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+    .append("g");
 
-// var node = sectionview.selectAll(".node");
-
-function doNodes(){
   b = 1; //for toggle
-// var blue = "#8ED8F8";
-// var green = "#b9d989";
-// var pink = "#F6ADCD"; 
 
 var prevClicked = null;
 // var width = $('#graphHolder').width();
@@ -150,6 +147,9 @@ var p0 = [width/2, height/2, 240],
 var legend1 = [width - 50, 100];
 var legend2 = [width - 50, 100];
 var legend3 = [width - 50, 100];
+
+sectionview
+    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom));
 
 sectionview.selectAll("circle")
     .data([p0, p1])
@@ -256,6 +256,19 @@ var node = sectionview.selectAll(".node")
 function zoom() {
   sectionview.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
+//special jquery library for a nice mouseover headline / title per rectangle
+ $('.node').tipsy({ 
+        gravity: 'nw', 
+        html: true, 
+        //fade: true,
+        title: function() {
+          var d = this.__data__;
+          // return d.score+" ("+d.section+")";
+          // var intit = parseInt(d.score);
+          // return (intit)+" pts";
+          return d.name;
+        }
+      });
 }
 
 var b=0;
@@ -288,18 +301,6 @@ sortToggle.on('click', function(d,i) {
 function goBack(){
   b=0;
 }
-//special jquery library for a nice mouseover headline / title per rectangle
- $('circle').tipsy({ 
-        gravity: 'nw', 
-        html: true, 
-        //fade: true,
-        title: function() {
-          var d = this.__data__;
-          // return d.score+" ("+d.section+")";
-          // var intit = parseInt(d.score);
-          // return (intit)+" pts";
-        }
-      });
 
  function showInformation(id) {
     var name = graph.nodes[id].name;
