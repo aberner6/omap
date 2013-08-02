@@ -3,21 +3,35 @@
 <meta charset="utf-8">
 <body>
 
-<!-- <script type="text/javascript" src="jquery-1.7.2.min.js"></script> 
+<script type="text/javascript" src="jquery-1.7.2.min.js"></script> 
 <script type="text/javascript" src="jquery.tipsy.js"></script>
-<link href="tipsy.css" rel="stylesheet" type="text/css" />  -->
+<link href="tipsy.css" rel="stylesheet" type="text/css" /> 
 <script type="text/javascript" src="http://d3js.org/d3.v2.min.js"></script>
+
        <style>
             .link {
                 fill: none;
                 stroke: #ccc;
                 stroke-width: 1.5px;
             }
+            .toggle{
+          		font-family:Helvetica Neue;
+          		font-size:10pt;
+        	}
+		svg {display: block; width: 100%; margin: 40;}
         </style>
-<!-- <div id="click"></div>
-<div id="clicked" style="display:none"></div> -->
+
+ <div id="click"></div>
+ <div id="clicked" style="display:none"></div>
+   <!-- <div id="blockit" style="display:none"></div> -->
+
+<canvas id="myCanvas" width="1800" height="100" style="border:1px solid #000000;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
  <div id="omap"></div>
-    <script type="text/javascript" src="oppmapasrect.js"></script>
+
+ <script type="text/javascript" src="oppmapasrect.js"></script>
+
 </body>
 </html>
 
