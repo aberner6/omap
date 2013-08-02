@@ -8,7 +8,7 @@
             "problem": "Teams have no insight into their potential performance capacity, and theefore can't optimize their work patterns.",
             "valueprop": "Quantifying and conveying the performance capacity of team member's potential performance in real time so that they can be supported and maintained over time.",
             "tags": [
-                "quantiefiedself",
+                "quantifiedself",
                 "mobile",
                 "now"
             ],
@@ -21,7 +21,7 @@
             "group": 1,
             "id": 1,
             "tags": [
-                "quantiefiedself",
+                "quantifiedself",
                 "mobile",
                 "now",
                 "physical/digital",
@@ -31,8 +31,13 @@
         {
             "name": "Amplitude Coach",
             "group": 1,
-            "id": 2
-        },
+            "id": 2,
+            "tags": [
+                "quantifiedself",
+                "now",
+                "ubicomp"
+            ]
+            },
         {
             "name": "Quantified Space",
             "group": 1,
